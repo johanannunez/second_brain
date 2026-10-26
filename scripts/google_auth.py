@@ -63,9 +63,7 @@ def main() -> None:
             os.fsync(output_file.fileno())
         os.link(temp_path, output_path)
     except FileExistsError as exc:
-        raise SystemExit(
-            f"Refusing to overwrite the existing token file: {output_path}"
-        ) from exc
+        raise SystemExit(f"Refusing to overwrite the existing token file: {output_path}") from exc
     finally:
         if temp_path is not None:
             temp_path.unlink(missing_ok=True)

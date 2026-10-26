@@ -5,3 +5,6 @@ client_secret*.json
 *google-refresh-token*.json
 __pycache__/
 *.py[cod]
+.venv/
+.pytest_cache/
+.ruff_cache/

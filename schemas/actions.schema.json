@@ -1,0 +1,336 @@
+{
+  "$defs": {
+    "ActionItem": {
+      "discriminator": {
+        "mapping": {
+          "calendar_block": "#/$defs/CalendarBlock",
+          "calendar_set_busy": "#/$defs/CalendarSetBusy",
+          "gmail_draft": "#/$defs/GmailDraft",
+          "gmail_label": "#/$defs/GmailLabel",
+          "notify": "#/$defs/Notify",
+          "outbox_message": "#/$defs/OutboxMessage",
+          "todoist_complete": "#/$defs/TodoistComplete",
+          "todoist_create": "#/$defs/TodoistCreate"
+        },
+        "propertyName": "type"
+      },
+      "oneOf": [
+        {
+          "$ref": "#/$defs/GmailDraft"
+        },
+        {
+          "$ref": "#/$defs/GmailLabel"
+        },
+        {
+          "$ref": "#/$defs/TodoistCreate"
+        },
+        {
+          "$ref": "#/$defs/TodoistComplete"
+        },
+        {
+          "$ref": "#/$defs/CalendarSetBusy"
+        },
+        {
+          "$ref": "#/$defs/CalendarBlock"
+        },
+        {
+          "$ref": "#/$defs/OutboxMessage"
+        },
+        {
+          "$ref": "#/$defs/Notify"
+        }
+      ]
+    },
+    "CalendarBlock": {
+      "additionalProperties": false,
+      "properties": {
+        "account": {
+          "enum": [
+            "parcel",
+            "personal"
+          ],
+          "title": "Account",
+          "type": "string"
+        },
+        "calendar_id": {
+          "$ref": "#/$defs/Identifier"
+        },
+        "end": {
+          "$ref": "#/$defs/ShortText"
+        },
+        "start": {
+          "$ref": "#/$defs/ShortText"
+        },
+        "title": {
+          "maxLength": 300,
+          "minLength": 4,
+          "pattern": "^SB:",
+          "title": "Title",
+          "type": "string"
+        },
+        "type": {
+          "const": "calendar_block",
+          "title": "Type",
+          "type": "string"
+        }
+      },
+      "required": [
+        "type",
+        "account",
+        "calendar_id",
+        "title",
+        "start",
+        "end"
+      ],
+      "title": "CalendarBlock",
+      "type": "object"
+    },
+    "CalendarSetBusy": {
+      "additionalProperties": false,
+      "properties": {
+        "account": {
+          "enum": [
+            "parcel",
+            "personal"
+          ],
+          "title": "Account",
+          "type": "string"
+        },
+        "calendar_id": {
+          "$ref": "#/$defs/Identifier"
+        },
+        "event_id": {
+          "$ref": "#/$defs/Identifier"
+        },
+        "type": {
+          "const": "calendar_set_busy",
+          "title": "Type",
+          "type": "string"
+        }
+      },
+      "required": [
+        "type",
+        "account",
+        "calendar_id",
+        "event_id"
+      ],
+      "title": "CalendarSetBusy",
+      "type": "object"
+    },
+    "GmailDraft": {
+      "additionalProperties": false,
+      "properties": {
+        "account": {
+          "enum": [
+            "parcel",
+            "personal"
+          ],
+          "title": "Account",
+          "type": "string"
+        },
+        "body": {
+          "$ref": "#/$defs/ShortText"
+        },
+        "subject": {
+          "$ref": "#/$defs/ShortText"
+        },
+        "thread_id": {
+          "$ref": "#/$defs/Identifier"
+        },
+        "type": {
+          "const": "gmail_draft",
+          "title": "Type",
+          "type": "string"
+        }
+      },
+      "required": [
+        "type",
+        "account",
+        "thread_id",
+        "subject",
+        "body"
+      ],
+      "title": "GmailDraft",
+      "type": "object"
+    },
+    "GmailLabel": {
+      "additionalProperties": false,
+      "properties": {
+        "account": {
+          "enum": [
+            "parcel",
+            "personal"
+          ],
+          "title": "Account",
+          "type": "string"
+        },
+        "label": {
+          "maxLength": 100,
+          "minLength": 4,
+          "pattern": "^SB/",
+          "title": "Label",
+          "type": "string"
+        },
+        "message_id": {
+          "$ref": "#/$defs/Identifier"
+        },
+        "type": {
+          "const": "gmail_label",
+          "title": "Type",
+          "type": "string"
+        }
+      },
+      "required": [
+        "type",
+        "account",
+        "message_id",
+        "label"
+      ],
+      "title": "GmailLabel",
+      "type": "object"
+    },
+    "Identifier": {
+      "maxLength": 300,
+      "minLength": 1,
+      "type": "string"
+    },
+    "Notify": {
+      "additionalProperties": false,
+      "properties": {
+        "text": {
+          "maxLength": 300,
+          "minLength": 1,
+          "title": "Text",
+          "type": "string"
+        },
+        "type": {
+          "const": "notify",
+          "title": "Type",
+          "type": "string"
+        }
+      },
+      "required": [
+        "type",
+        "text"
+      ],
+      "title": "Notify",
+      "type": "object"
+    },
+    "OutboxMessage": {
+      "additionalProperties": false,
+      "properties": {
+        "channel": {
+          "enum": [
+            "quo",
+            "hospitable"
+          ],
+          "title": "Channel",
+          "type": "string"
+        },
+        "message": {
+          "$ref": "#/$defs/ShortText"
+        },
+        "reason": {
+          "$ref": "#/$defs/ShortText"
+        },
+        "recipient_id": {
+          "$ref": "#/$defs/Identifier"
+        },
+        "type": {
+          "const": "outbox_message",
+          "title": "Type",
+          "type": "string"
+        }
+      },
+      "required": [
+        "type",
+        "channel",
+        "recipient_id",
+        "message",
+        "reason"
+      ],
+      "title": "OutboxMessage",
+      "type": "object"
+    },
+    "ShortText": {
+      "maxLength": 4000,
+      "minLength": 1,
+      "type": "string"
+    },
+    "TodoistComplete": {
+      "additionalProperties": false,
+      "properties": {
+        "proof_detail": {
+          "$ref": "#/$defs/ShortText"
+        },
+        "proof_source": {
+          "$ref": "#/$defs/ShortText"
+        },
+        "task_id": {
+          "$ref": "#/$defs/Identifier"
+        },
+        "type": {
+          "const": "todoist_complete",
+          "title": "Type",
+          "type": "string"
+        }
+      },
+      "required": [
+        "type",
+        "task_id",
+        "proof_source",
+        "proof_detail"
+      ],
+      "title": "TodoistComplete",
+      "type": "object"
+    },
+    "TodoistCreate": {
+      "additionalProperties": false,
+      "properties": {
+        "content": {
+          "$ref": "#/$defs/ShortText"
+        },
+        "description": {
+          "default": "",
+          "maxLength": 1000,
+          "title": "Description",
+          "type": "string"
+        },
+        "due_string": {
+          "anyOf": [
+            {
+              "maxLength": 200,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Due String"
+        },
+        "label": {
+          "const": "sb",
+          "title": "Label",
+          "type": "string"
+        },
+        "type": {
+          "const": "todoist_create",
+          "title": "Type",
+          "type": "string"
+        }
+      },
+      "required": [
+        "type",
+        "content",
+        "label"
+      ],
+      "title": "TodoistCreate",
+      "type": "object"
+    }
+  },
+  "items": {
+    "$ref": "#/$defs/ActionItem"
+  },
+  "type": "array"
+}
