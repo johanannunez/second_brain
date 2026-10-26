@@ -1,0 +1,7 @@
+.env
+.env.*
+!.env.example
+client_secret*.json
+*google-refresh-token*.json
+__pycache__/
+*.py[cod]
