@@ -1,0 +1,44 @@
+name: Worker fixture dry run
+
+on:
+  workflow_dispatch:
+    inputs:
+      worker:
+        description: Worker fixture to validate
+        required: true
+        type: choice
+        options:
+          - morning-briefing
+          - midday-sweep
+          - evening-check-in
+          - weekly-review
+          - monthly-close
+
+permissions:
+  contents: read
+
+jobs:
+  dry-run:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - uses: astral-sh/setup-uv@v6
+      - run: uv sync --locked --group dev
+      - name: Build fixture plan
+        run: uv run --locked --group dev python -m sb.dry_run --worker "${{ inputs.worker }}" | tee /tmp/worker-plan.json
+      - name: Add run summary
+        run: |
+          python - <<'PY' >> "$GITHUB_STEP_SUMMARY"
+          import json
+          from pathlib import Path
+          plan = json.loads(Path('/tmp/worker-plan.json').read_text())
+          print(f"## {plan['worker']} fixture dry run")
+          print("No provider calls or file writes were executed.")
+          print(f"\nWould write: {', '.join(plan['would_write'])}")
+          print(f"\nWould apply {len(plan['would_apply'])} allowlisted action(s).")
+          PY

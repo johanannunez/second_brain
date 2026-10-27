@@ -68,7 +68,7 @@ Build one small client per source in `sb/clients/`. Each exposes only the reads 
 - **Turno API v2**: base `https://api.turnoverbnb.com/v2`. Headers `Accept: application/json` (required; requests fail with 422 without it), `Authorization: Bearer $TURNO_SECRET_KEY`, `TBNB-Partner-ID: $TURNO_PARTNER_ID`. Use `GET /projects?start=&end=` and `GET /problems?status=unresolved`, and follow pagination past page one. Fallback: Turno emails in Gmail, and say so in the output.
 - **Todoist API v1**: base `https://api.todoist.com/api/v1` (the old `/rest/v2` returns 410). Bearer `$TODOIST_API_TOKEN`. Responses paginate as `{"results": [...], "next_cursor": ...}`. Fetch projects once per run for names. Pull completed items for the check-ins.
 - **PriceLabs customer API** (optional): nightly prices for open nights, so gap nights can carry a dollar value.
-- **Notion API** (optional, backfill).
+- **Notion API** (optional, backfill). Notion is project context, notes, daily log, and source links. Todoist is authoritative for tasks, due dates, and completion. Never create or sync a duplicate task database in Notion.
 - **GitHub**: this repo, and for the backfill, the READMEs of my other repos (proxy, furnish_pro, junto, the archived theparcelcompany, and any others under johanannunez). Record each project's purpose only. Skip anything about third parties' health or residents.
 - **QuickBooks Online** (later, OAuth app): month-end summary only.
 - **Slack**: one bot token, used only to DM me.

@@ -11,4 +11,4 @@ lint:
 
 dry-run:
 	@test -n "$(WORKER)" || (echo 'Usage: make dry-run WORKER=<name>' >&2; exit 2)
-	uv run --locked --group dev python -m sb.dry_run --worker "$(WORKER)"
+	@uv run --locked --group dev python -m sb.dry_run --worker "$(WORKER)"

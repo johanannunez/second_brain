@@ -1,0 +1,45 @@
+name: Checks
+
+on:
+  pull_request:
+  push:
+    branches: [main, "phase*/**"]
+
+permissions:
+  contents: read
+
+jobs:
+  test-and-lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - uses: astral-sh/setup-uv@v6
+      - run: uv sync --locked --group dev
+      - run: uv run --locked --group dev pytest
+      - run: uv run --locked --group dev ruff check .
+      - run: test "$(wc -l < AGENTS.md)" -le 100
+      - run: python scripts/privacy_scan.py
+      - run: |
+          set -eu
+          for worker in morning-briefing midday-sweep evening-check-in weekly-review monthly-close; do
+            make dry-run WORKER="$worker" > "/tmp/${worker}.json"
+            python -c 'import json,sys; json.load(open(sys.argv[1]))' "/tmp/${worker}.json"
+          done
+
+  secret-scan:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
