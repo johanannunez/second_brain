@@ -22,7 +22,9 @@ TOKEN = re.compile(
 LABELED_SECRET = re.compile(
     r"(?i)\b(?:door|lockbox|smart[- ]?lock)\s+code\s*[:=]\s*\S+|"
     r"\bwi[- ]?fi\s+password\s*[:=]\s*\S+|"
-    r"\b(?:api\s+key|access\s+token|refresh\s+token)\s*[:=]\s*\S+"
+    r"\b(?:api\s+key|access\s+token|refresh\s+token)\s*[:=]\s*\S+|"
+    r"\b(?:SSN|social security number|EIN|tax ID|bank account|account number)"
+    r"\s*(?:is|[:=])?\s*\d[\d -]{5,20}\b"
 )
 JADWIN_RESIDENT = re.compile(
     r"(?is)Jadwin Recovery.{0,100}\bresidents?\b|\bresidents?\b.{0,100}Jadwin Recovery"
